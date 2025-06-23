@@ -1,0 +1,443 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sangabiz - Download High Quality Music{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary-orange: #FF7D33;
+            --secondary-orange: #FFAA80;
+            --dark-orange: #E67E22;
+            --light-cream: #FFF5EB;
+            --dark-brown: #5C3A21;
+            --medium-brown: #8B5A2B;
+            --light-brown: #D2B48C;
+            --text-dark: #3E2723;
+            --text-light: #FFF5EB;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: var(--space-sm) 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            flex: 1;
+            margin: 0 var(--space-lg);
+            max-width: 500px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar form {
+            display: flex;
+            width: 100%;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            border: 1px solid var(--light-brown);
+            border-radius: 5px 0 0 5px;
+            font-size: 0.9rem;
+            background-color: var(--light-cream);
+            color: var(--dark-brown);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 2px rgba(255, 125, 51, 0.2);
+        }
+
+        .search-bar button {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            padding: 0 var(--space-md);
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--dark-orange);
+        }
+
+        /* Nav Links */
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            margin-left: var(--space-lg);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-orange);
+        }
+
+        .login-btn {
+            background-color: var(--primary-orange);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        .user-account {
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary-orange);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-brown);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Mobile Search */
+        .search-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--dark-brown);
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: var(--space-md);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark-brown);
+            color: white;
+            padding: 60px 0 0;
+        }
+
+        .footer .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-orange);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            transition: color 0.3s ease;
+            color: var(--light-cream);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--secondary-orange);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-orange);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-bar {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                margin: 0;
+                padding: 15px;
+                background-color: white;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                z-index: 999;
+                max-width: 100%;
+                display: none;
+            }
+            
+            .search-bar.active {
+                display: block;
+            }
+            
+            .search-toggle {
+                display: block;
+            }
+            
+            .search-bar input {
+                padding: 12px 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .footer-section {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{% url 'index' %}" class="logo">
+                <img src="{% static 'images/logo.png' %}" alt="Sangabiz Logo">
+            </a>
+            <div class="search-bar">
+                <form action="{% url 'search' %}" method="GET">
+                    <input type="text" name="q" placeholder="Search for songs, artists, albums...">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'browse' %}">Browse</a>
+                <a href="{% url 'popular' %}">Popular</a>
+                <a href="{% url 'new_releases' %}">New Releases</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="user-account"><i class="fas fa-user"></i></a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="login-btn">Login</a>
+                {% endif %}
+            </div>
+            <button class="search-toggle">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'browse' %}">Browse</a>
+        <a href="{% url 'popular' %}">Popular</a>
+        <a href="{% url 'new_releases' %}">New Releases</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}">My Account</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+    <button class="search-toggle">
+        <i class="fas fa-search"></i>
+    </button>
+    <div class="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-section">
+                <h3>Sangabiz</h3>
+                <p>Your premier destination for high-quality music downloads. Millions of songs at your fingertips.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'browse' %}">Browse</a></li>
+                    <li><a href="{% url 'popular' %}">Popular</a></li>
+                    <li><a href="{% url 'new_releases' %}">New Releases</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="{% url 'terms' %}">Terms of Service</a></li>
+                    <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'dmca' %}">DMCA</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Sangabiz.com. All rights reserved. Developed and powered by sanga-tech</p> 
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.mobile-menu').classList.toggle('active');
+        });
+
+        // Mobile Search Toggle
+        document.querySelector('.search-toggle').addEventListener('click', function() {
+            document.querySelector('.search-bar').classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!document.querySelector('.mobile-menu').contains(e.target) && 
+                !document.querySelector('.mobile-menu-btn').contains(e.target)) {
+                document.querySelector('.mobile-menu').classList.remove('active');
+            }
+            
+            if (!document.querySelector('.search-bar').contains(e.target) && 
+                !document.querySelector('.search-toggle').contains(e.target)) {
+                document.querySelector('.search-bar').classList.remove('active');
+            }
+        });
+    </script>
+   {% block extra_js %}
+   <script src="{% static 'js/audio-player.js' %}"></script>
+   <script src="{% static 'js/comments.js' %}"></script>
+   <script src="{% static 'js/like-system.js' %}"></script>
+ {% endblock %}
+</body>
+</html>

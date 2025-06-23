@@ -1,0 +1,19 @@
+<div class="comment mb-3" id="comment-{{ comment.id }}">
+    <div class="d-flex">
+        <div class="flex-shrink-0">
+            <img src="{{ comment.user.profile.avatar.url }}" 
+                 alt="{{ comment.user.username }}" 
+                 class="rounded-circle" 
+                 width="40" height="40">
+        </div>
+        <div class="flex-grow-1 ms-3">
+            <div class="comment-header">
+                <strong>{{ comment.user.username }}</strong>
+                <small class="text-muted ms-2">{{ comment.created_at|timesince }} ago</small>
+            </div>
+            <div class="comment-body">
+                {{ comment.content|linebreaks }}
+            </div>
+        </div>
+    </div>
+</div>

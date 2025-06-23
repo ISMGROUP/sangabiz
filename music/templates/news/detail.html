@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}{{ news.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <article class="news-article">
+                <header class="mb-4">
+                    <h1 class="display-5 fw-bold mb-3">{{ news.title }}</h1>
+                    <div class="d-flex align-items-center text-muted mb-4">
+                        <span class="me-3">
+                            <i class="far fa-calendar-alt me-1"></i>
+                            {{ news.published_date|date:"F j, Y" }}
+                        </span>
+                        <span>
+                            <i class="far fa-user me-1"></i>
+                            {{ news.author }}
+                        </span>
+                    </div>
+                    {% if news.image %}
+                    <img src="{{ news.image.url }}" alt="{{ news.title }}" class="img-fluid rounded-3 shadow-sm mb-4 w-100" style="max-height: 500px; object-fit: cover;">
+                    {% endif %}
+                </header>
+
+                <div class="news-content mb-5 fs-5 lh-base" style="color: #333;">
+                    {{ news.content|safe }}
+                </div>
+
+                <footer class="border-top pt-4">
+                    <a href="{% url 'news_list' %}" class="btn btn-outline-primary rounded-pill px-4">
+                        <i class="fas fa-arrow-left me-2"></i>Back to News
+                    </a>
+                </footer>
+            </article>
+        </div>
+    </div>
+</div>
+
+<style>
+    .news-article {
+        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        line-height: 1.7;
+    }
+    
+    .news-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 1.5rem 0;
+    }
+    
+    .news-content h2, 
+    .news-content h3 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+    
+    .news-content p {
+        margin-bottom: 1.5rem;
+    }
+    
+    .news-content blockquote {
+        border-left: 4px solid #0d6efd;
+        padding-left: 1.5rem;
+        margin: 2rem 0;
+        color: #555;
+        font-style: italic;
+    }
+    
+    .news-content ul, 
+    .news-content ol {
+        padding-left: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .news-content li {
+        margin-bottom: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .news-content {
+            font-size: 1rem !important;
+        }
+    }
+</style>
+{% endblock %}

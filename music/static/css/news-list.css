@@ -1,0 +1,202 @@
+/* News Page Styles */
+.container.py-5 {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+h1.mb-4 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d3436;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+h1.mb-4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+    border-radius: 2px;
+}
+
+article.mb-5 {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 3rem;
+}
+
+article.mb-5:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+article h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #2d3436;
+}
+
+article h2 a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+article h2 a:hover {
+    color: #6c5ce7;
+}
+
+.text-muted.mb-2 {
+    color: #636e72;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.text-muted.mb-2 small {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Updated Image Styles - Whole Image Display */
+.img-fluid.rounded.mb-3 {
+    width: 100%;
+    height: auto;
+    max-height: none; /* Remove any height restrictions */
+    object-fit: contain; /* Changed from cover to contain */
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Alternative approach if you want to maintain aspect ratio without cropping */
+.news-image-container {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.news-image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+article p {
+    color: #2d3436;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.btn-outline-primary {
+    border: 2px solid #6c5ce7;
+    color: #6c5ce7;
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-outline-primary:hover {
+    background-color: #6c5ce7;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+}
+
+/* Pagination Styles */
+nav[aria-label="News pagination"] {
+    margin-top: 3rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.page-item {
+    margin: 0 0.2rem;
+}
+
+.page-link {
+    color: #6c5ce7;
+    border: 1px solid #dfe6e9;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+.page-link:hover {
+    background-color: #f5f6fa;
+    border-color: #a29bfe;
+}
+
+.page-item.active .page-link {
+    background-color: #6c5ce7;
+    border-color: #6c5ce7;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1.mb-4 {
+        font-size: 2rem;
+    }
+    
+    article.mb-5 {
+        padding: 1.5rem;
+    }
+    
+    article h2 {
+        font-size: 1.5rem;
+    }
+    
+    .text-muted.mb-2 {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+    }
+}
+
+/* Animation for article cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+article.mb-5 {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+article.mb-5:nth-child(1) { animation-delay: 0.1s; }
+article.mb-5:nth-child(2) { animation-delay: 0.2s; }
+article.mb-5:nth-child(3) { animation-delay: 0.3s; }
+article.mb-5:nth-child(4) { animation-delay: 0.4s; }
+article.mb-5:nth-child(5) { animation-delay: 0.5s; }

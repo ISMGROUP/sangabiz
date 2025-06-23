@@ -1,0 +1,441 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Browse Music - Sangabiz{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Main Browse Section */
+    .browse {
+        padding: 2rem 0;
+        background-color: #f8f9fa;
+        min-height: calc(100vh - 120px);
+    }
+    
+    .section-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #343a40;
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+    
+    /* Filters */
+    .browse-filters {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .filter-group label {
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .filter-group select {
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        background-color: white;
+        cursor: pointer;
+    }
+    
+    /* Songs Grid */
+    .songs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .song-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .song-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .song-image {
+        position: relative;
+        padding-top: 100%; /* Square aspect ratio */
+        overflow: hidden;
+    }
+    
+    .song-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .song-card:hover .song-image img {
+        transform: scale(1.05);
+    }
+    
+    .song-actions {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-around;
+        padding: 1rem;
+        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .song-card:hover .song-actions {
+        opacity: 1;
+    }
+    
+    .play-btn, .download-btn {
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #343a40;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .play-btn:hover {
+        background-color: #1DB954;
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .download-btn:hover {
+        background-color: #007bff;
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .song-info {
+        padding: 1rem;
+    }
+    
+    .song-info h3 {
+        margin: 0;
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .song-info h3 a {
+        color: #343a40;
+        text-decoration: none;
+    }
+    
+    .song-info p {
+        margin: 0.5rem 0 0;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .song-info p a {
+        color: #6c757d;
+        text-decoration: none;
+    }
+    
+    .song-info p a:hover {
+        text-decoration: underline;
+    }
+    
+    .song-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    
+    /* No Songs Message */
+    .no-songs {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 2rem;
+        color: #6c757d;
+    }
+    
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+    
+    .page-link, .current-page {
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+    
+    .page-link {
+        background-color: white;
+        color: #007bff;
+        border: 1px solid #dee2e6;
+    }
+    
+    .page-link:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .current-page {
+        background-color: #007bff;
+        color: white;
+    }
+    
+    /* Audio Player */
+    #audio-player {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #343a40;
+        color: white;
+        padding: 1rem;
+        display: none;
+        z-index: 1000;
+    }
+    
+    .player-controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .player-info {
+        flex-grow: 1;
+    }
+    
+    .player-title {
+        font-weight: bold;
+        margin-bottom: 0.25rem;
+    }
+    
+    .player-artist {
+        font-size: 0.9rem;
+        color: #adb5bd;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .songs-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+        
+        .browse-filters {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="browse">
+    <div class="container">
+        <h2 class="section-title">Browse Music</h2>
+        
+        <div class="browse-filters">
+            <div class="filter-group">
+                <label for="genre">Genre:</label>
+                <select id="genre">
+                    <option value="">All Genres</option>
+                    {% for genre in genres %}
+                    <option value="{{ genre.slug }}">{{ genre.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="sort">Sort By:</label>
+                <select id="sort">
+                    <option value="popular">Most Popular</option>
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="a-z">A-Z</option>
+                    <option value="z-a">Z-A</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="browse-results">
+            <div class="songs-grid">
+                {% for song in songs %}
+                <div class="song-card" data-song-id="{{ song.id }}">
+                    <div class="song-image">
+                        <img src="{{ song.album.cover.url }}" alt="{{ song.title }}" 
+                             onerror="this.onerror=null;this.src='{% static 'images/default-cover.jpg' %}'">
+                        <div class="song-actions">
+                            <button class="play-btn" data-song-id="{{ song.id }}" aria-label="Play {{ song.title }}">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <a href="{% url 'download_song' song.id %}" class="download-btn" aria-label="Download {{ song.title }}" download>
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="song-info">
+                        <h3><a href="{% url 'song_detail' song.artist.slug song.album.slug song.slug %}">{{ song.title }}</a></h3>
+                        <p><a href="{% url 'artist_detail' song.artist.slug %}">{{ song.artist.name }}</a></p>
+                        <div class="song-stats">
+                            <span><i class="fas fa-play"></i> {{ song.play_count }}</span>
+                            <span><i class="fas fa-download"></i> {{ song.download_count }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="no-songs">
+                    <p>No songs found matching your criteria.</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if songs.has_other_pages %}
+            <div class="pagination">
+                {% if songs.has_previous %}
+                <a href="?page={{ songs.previous_page_number }}" class="page-link">&laquo; Previous</a>
+                {% endif %}
+                
+                {% for num in songs.paginator.page_range %}
+                    {% if songs.number == num %}
+                    <span class="current-page">{{ num }}</span>
+                    {% else %}
+                    <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if songs.has_next %}
+                <a href="?page={{ songs.next_page_number }}" class="page-link">Next &raquo;</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Audio Player -->
+<div id="audio-player">
+    <div class="player-controls">
+        <button id="player-play-btn" class="play-btn">
+            <i class="fas fa-play"></i>
+        </button>
+        <div class="player-info">
+            <div class="player-title" id="player-title">No song selected</div>
+            <div class="player-artist" id="player-artist"></div>
+        </div>
+        <audio id="audio-element" controls></audio>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    const audioPlayer = new Audio();
+    let currentSongId = null;
+    
+    // Play button functionality
+    document.querySelectorAll('.play-btn').forEach(button => {
+        button.addEventListener('click', async function() {
+            const songId = this.getAttribute('data-song-id');
+            
+            try {
+                // If same song, toggle play/pause
+                if (currentSongId === songId) {
+                    if (audioPlayer.paused) {
+                        await audioPlayer.play();
+                        this.innerHTML = '<i class="fas fa-pause"></i>';
+                    } else {
+                        audioPlayer.pause();
+                        this.innerHTML = '<i class="fas fa-play"></i>';
+                    }
+                    return;
+                }
+                
+                // New song - fetch song data
+                currentSongId = songId;
+                const response = await fetch(`/api/songs/${songId}/stream/`);
+                const songData = await response.json();
+                
+                // Update player with new song
+                audioPlayer.src = songData.audio_url;
+                audioPlayer.currentTime = 0;
+                
+                // Update UI
+                document.querySelectorAll('.play-btn').forEach(btn => {
+                    btn.innerHTML = '<i class="fas fa-play"></i>';
+                });
+                this.innerHTML = '<i class="fas fa-pause"></i>';
+                
+                // Play the song
+                await audioPlayer.play();
+                
+                // Record play count
+                fetch(`/api/songs/${songId}/play/`, { 
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error playing song:', error);
+                alert('Error playing song. Please try again.');
+            }
+        });
+    });
+    
+    // Handle audio ended event
+    audioPlayer.addEventListener('ended', function() {
+        document.querySelectorAll(`.play-btn[data-song-id="${currentSongId}"]`).forEach(btn => {
+            btn.innerHTML = '<i class="fas fa-play"></i>';
+        });
+        currentSongId = null;
+    });
+    
+    // Helper function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %}

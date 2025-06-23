@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}New Releases - Sangabiz{% endblock %}
+
+{% block content %}
+<section class="new-releases">
+    <div class="container">
+        <h2 class="section-title">New Releases</h2>
+        
+        <div class="albums-grid">
+            {% for album in page_obj %}
+            <div class="album-card">
+                <a href="{% url 'album_detail' album.artist.slug album.slug %}">
+                    <div class="album-image">
+                        <img src="{{ album.cover.url }}" alt="{{ album.title }}">
+                    </div>
+                    <h3>{{ album.title }}</h3>
+                    <p>{{ album.artist.name }}</p>
+                    <p class="release-date">Released: {{ album.release_date|date:"F j, Y" }}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% include "includes/pagination.html" %}
+    </div>
+</section>
+{% endblock %}

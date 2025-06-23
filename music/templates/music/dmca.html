@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}DMCA Policy - {{ company_name }}{% endblock %}
+
+{% block content %}
+<div class="legal-container">
+    <h1>DMCA Copyright Policy</h1>
+    <p class="last-updated">Last Updated: {{ last_updated }}</p>
+    
+    <div class="legal-content">
+        <section>
+            <h2>1. Copyright Infringement Notification</h2>
+            <p>To file a DMCA notice, please provide:</p>
+            <ol>
+                <li>Identification of the copyrighted work</li>
+                <li>URL of the infringing material</li>
+                <li>Your contact information</li>
+                <li>Statement of good faith belief</li>
+                <li>Statement under penalty of perjury</li>
+                <li>Your physical or electronic signature</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>2. Counter-Notification</h2>
+            <p>If you believe content was wrongly removed, send:</p>
+            <ol>
+                <li>Identification of the removed content</li>
+                <li>Your contact information</li>
+                <li>Statement under penalty of perjury</li>
+                <li>Consent to jurisdiction</li>
+                <li>Your physical or electronic signature</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>3. Repeat Infringers</h2>
+            <p>We terminate accounts of users who are repeat infringers.</p>
+        </section>
+
+        <section>
+            <h2>4. Submit Notices To</h2>
+            <address>
+                {{ company_name }}<br>
+                DMCA Agent<br>
+                {{ mailing_address }}<br>
+                Email: <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+            </address>
+            <p>We respond to valid notices within 5 business days.</p>
+        </section>
+    </div>
+</div>
+{% endblock %}

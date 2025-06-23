@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ album.title }} by {{ album.artist.name }} | Sangabiz{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/album.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="album-container">
+    <!-- Album Header Section -->
+    <section class="album-header">
+        <div class="album-cover">
+            <img src="{{ album.cover.url }}" alt="{{ album.title }} cover" 
+                 onerror="this.onerror=null;this.src='{% static 'images/default-cover.jpg' %}'">
+        </div>
+        <div class="album-info">
+            <h1>{{ album.title }}</h1>
+            <h2>
+                <a href="{% url 'artist_detail' album.artist.slug %}">{{ album.artist.name }}</a>
+            </h2>
+            
+            <div class="album-meta">
+                <span class="release-year">{{ album.release_date|date:"Y" }}</span>
+                <span class="song-count">{{ album.songs.count }} track{{ album.songs.count|pluralize }}</span>
+                <span class="total-duration">{{ total_duration }}</span>
+            </div>
+            
+            <div class="album-actions">
+                <button class="btn-play-all" data-album-id="{{ album.id }}">
+                    <i class="fas fa-play"></i> Play All
+                </button>
+                <button class="btn-download-all" data-album-id="{{ album.id }}">
+                    <i class="fas fa-download"></i> Download All
+                </button>
+                {% if user.is_authenticated %}
+                <button class="btn-save-album" data-album-id="{{ album.id }}">
+                    <i class="fas fa-heart"></i> Save Album
+                </button>
+                {% endif %}
+            </div>
+            
+            <div class="album-description">
+                {% if album.description %}
+                    <p>{{ album.description }}</p>
+                {% else %}
+                    <p>No description available for this album.</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Songs List Section -->
+    <section class="album-songs">
+        <h3>Tracks</h3>
+        <div class="song-list">
+            <div class="song-list-header">
+                <div class="header-number">#</div>
+                <div class="header-title">Title</div>
+                <div class="header-duration">Duration</div>
+                <div class="header-actions">Actions</div>
+            </div>
+            
+            {% for song in album.songs.all %}
+            <div class="song-item" data-song-id="{{ song.id }}">
+                <div class="song-number">{{ forloop.counter }}</div>
+                <div class="song-title">
+                    <span class="song-name">{{ song.title }}</span>
+                    {% if song.featured_artists.exists %}
+                    <span class="featured-artists">
+                        (feat. {% for artist in song.featured_artists.all %}{{ artist.name }}{% if not forloop.last %}, {% endif %}{% endfor %})
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="song-duration">{{ song.duration|time:"i:s" }}</div>
+                <div class="song-actions">
+                    <button class="btn-play" data-song-id="{{ song.id }}" title="Play">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <a href="{% url 'download_song' song.id %}" class="btn-download" title="Download" download>
+                        <i class="fas fa-download"></i>
+                    </a>
+                    {% if user.is_authenticated %}
+                    <button class="btn-save" data-song-id="{{ song.id }}" title="Add to favorites">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-songs">
+                <p>No songs available in this album.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Similar Albums Section -->
+    {% if similar_albums %}
+    <section class="similar-albums">
+        <h3>You Might Also Like</h3>
+        <div class="albums-grid">
+            {% for album in similar_albums %}
+            <div class="album-card">
+                <a href="{% url 'album_detail' album.artist.slug album.slug %}">
+                    <div class="album-image">
+                        <img src="{{ album.cover.url }}" alt="{{ album.title }}" 
+                             onerror="this.onerror=null;this.src='{% static 'images/default-cover.jpg' %}'">
+                    </div>
+                    <h4>{{ album.title }}</h4>
+                    <p>{{ album.artist.name }}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Play buttons functionality
+    document.querySelectorAll('.btn-play').forEach(button => {
+        button.addEventListener('click', function() {
+            const songId = this.getAttribute('data-song-id');
+            // Implement your play functionality here
+            console.log('Play song:', songId);
+        });
+    });
+
+    // Play all button
+    document.querySelector('.btn-play-all').addEventListener('click', function() {
+        const albumId = this.getAttribute('data-album-id');
+        // Implement play all functionality here
+        console.log('Play all songs from album:', albumId);
+    });
+
+    // Download all button
+    document.querySelector('.btn-download-all').addEventListener('click', function() {
+        const albumId = this.getAttribute('data-album-id');
+        // Implement download all functionality here
+        console.log('Download all songs from album:', albumId);
+    });
+
+    // Save album button
+    const saveAlbumBtn = document.querySelector('.btn-save-album');
+    if (saveAlbumBtn) {
+        saveAlbumBtn.addEventListener('click', function() {
+            const albumId = this.getAttribute('data-album-id');
+            // Implement save album functionality here
+            console.log('Save album:', albumId);
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,436 @@
+/* Artist Detail Page Styles */
+.artist-detail-section {
+    padding: 2rem 0;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Artist Header Section */
+.artist-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.artist-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.artist-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-image {
+    width: 100%;
+    height: 100%;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 4rem;
+}
+
+.artist-info {
+    text-align: center;
+}
+
+.artist-info h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #222;
+}
+
+.artist-bio {
+    margin: 1.5rem 0;
+    text-align: left;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.artist-bio h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #444;
+}
+
+.artist-bio p {
+    line-height: 1.6;
+    color: #555;
+}
+
+.artist-meta {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 1.5rem 0;
+}
+
+.meta-item {
+    text-align: center;
+}
+
+.meta-item h4 {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.meta-item p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.genre-tag {
+    background-color: #e0e0e0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.artist-social {
+    margin-top: 1.5rem;
+}
+
+.artist-social h4 {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.social-links a {
+    color: #555;
+    font-size: 1.3rem;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: #1db954; /* Spotify green for music theme */
+}
+
+/* Popular Songs Section */
+.popular-songs {
+    margin: 3rem 0;
+}
+
+.popular-songs h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.songs-list {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+}
+
+.song-item:hover {
+    background-color: #f9f9f9;
+}
+
+.song-number {
+    width: 30px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.song-image {
+    width: 50px;
+    height: 50px;
+    margin: 0 1rem;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.song-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.song-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.song-details h3 {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.song-details h3 a {
+    color: #333;
+    text-decoration: none;
+}
+
+.song-details h3 a:hover {
+    color: #1db954;
+}
+
+.song-details p {
+    font-size: 0.8rem;
+    color: #777;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.song-details p a {
+    color: #777;
+    text-decoration: none;
+}
+
+.song-details p a:hover {
+    color: #1db954;
+    text-decoration: underline;
+}
+
+.song-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-right: 1rem;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.song-meta .downloads {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.song-actions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.play-btn, .download-btn {
+    background: none;
+    border: none;
+    color: #777;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0.5rem;
+}
+
+.play-btn:hover, .download-btn:hover {
+    color: #1db954;
+}
+
+/* Albums Section */
+.artist-albums {
+    margin: 3rem 0;
+}
+
+.artist-albums h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.albums-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.album-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.album-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.album-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.album-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+}
+
+.album-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.album-card:hover .album-image img {
+    transform: scale(1.05);
+}
+
+.album-card h3 {
+    font-size: 0.9rem;
+    margin: 0.8rem 0.5rem 0.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album-card p {
+    font-size: 0.8rem;
+    color: #777;
+    margin: 0 0.5rem 0.8rem;
+}
+
+/* Similar Artists Section */
+.similar-artists {
+    margin: 3rem 0;
+}
+
+.similar-artists h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.artists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1.5rem;
+}
+
+.artist-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.artist-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.artist-card a {
+    text-decoration: none;
+    color: inherit;
+    padding: 1rem 0.5rem;
+    display: block;
+}
+
+.artist-card .artist-image {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 0.8rem;
+}
+
+.artist-card h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.artist-card p {
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .artist-header {
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .artist-image {
+        margin: 0;
+    }
+    
+    .artist-info {
+        text-align: left;
+        padding-left: 2rem;
+    }
+    
+    .artist-meta {
+        justify-content: flex-start;
+    }
+    
+    .social-links {
+        justify-content: flex-start;
+    }
+    
+    .albums-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+    
+    .artists-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+@media (min-width: 992px) {
+    .albums-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}

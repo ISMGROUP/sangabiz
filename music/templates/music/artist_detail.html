@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/artist_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="artist-detail-section">
+    <div class="container">
+        <div class="artist-header">
+            <div class="artist-image">
+                {% if artist.image %}
+                <img src="{{ artist.image.url }}" alt="{{ artist.name }}">
+                {% else %}
+                <div class="no-image">
+                    <i class="fas fa-user"></i>
+                </div>
+                {% endif %}
+            </div>
+            <div class="artist-info">
+                <h1>{{ artist.name }}</h1>
+                
+                {% if artist.bio %}
+                <div class="artist-bio">
+                    <h3>About</h3>
+                    <p>{{ artist.bio }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="artist-meta">
+                    {% if genres %}
+                    <div class="meta-item">
+                        <h4>Genres</h4>
+                        <div class="genre-tags">
+                            {% for genre in genres %}
+                            <span class="genre-tag">{{ genre.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="meta-item">
+                        <h4>Albums</h4>
+                        <p>{{ artist.albums.count }}</p>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <h4>Songs</h4>
+                        <p>{{ artist.songs.count }}</p>
+                    </div>
+                </div>
+                
+                {% if artist.website or artist.facebook or artist.twitter or artist.instagram %}
+                <div class="artist-social">
+                    <h4>Follow</h4>
+                    <div class="social-links">
+                        {% if artist.website %}
+                        <a href="{{ artist.website }}" target="_blank"><i class="fas fa-globe"></i></a>
+                        {% endif %}
+                        {% if artist.facebook %}
+                        <a href="{{ artist.facebook }}" target="_blank"><i class="fab fa-facebook"></i></a>
+                        {% endif %}
+                        {% if artist.twitter %}
+                        <a href="{{ artist.twitter }}" target="_blank"><i class="fab fa-twitter"></i></a>
+                        {% endif %}
+                        {% if artist.instagram %}
+                        <a href="{{ artist.instagram }}" target="_blank"><i class="fab fa-instagram"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if popular_songs %}
+        <div class="popular-songs">
+            <h2>Popular Tracks</h2>
+            <div class="songs-list">
+                {% for song in popular_songs %}
+                <div class="song-item">
+                    <div class="song-number">{{ forloop.counter }}</div>
+                    <div class="song-image">
+                        <img src="{{ song.album.cover.url }}" alt="{{ song.album.title }}">
+                    </div>
+                    <div class="song-details">
+                        <h3><a href="{% url 'song_detail' artist.slug song.album.slug song.slug %}">{{ song.title }}</a></h3>
+                        <p><a href="{% url 'album_detail' artist.slug song.album.slug %}">{{ song.album.title }}</a></p>
+                    </div>
+                    <div class="song-meta">
+                        <span class="duration">{{ song.get_duration_display }}</span>
+                        <span class="downloads"><i class="fas fa-download"></i> {{ song.download_count }}</span>
+                    </div>
+                    <div class="song-actions">
+                        <button class="play-btn" data-song-id="{{ song.id }}"><i class="fas fa-play"></i></button>
+                        <a href="{% url 'download_song' song.id %}" class="download-btn"><i class="fas fa-download"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="artist-albums">
+            <h2>Albums</h2>
+            <div class="albums-grid">
+                {% for album in albums %}
+                <div class="album-card">
+                    <a href="{% url 'album_detail' artist.slug album.slug %}">
+                        <div class="album-image">
+                            <img src="{{ album.cover.url }}" alt="{{ album.title }}">
+                        </div>
+                        <h3>{{ album.title }}</h3>
+                        <p>{{ album.release_date|date:"Y" }} • {{ album.song_count }} songs</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {% if similar_artists %}
+        <div class="similar-artists">
+            <h2>Similar Artists</h2>
+            <div class="artists-grid">
+                {% for artist in similar_artists %}
+                <div class="artist-card">
+                    <a href="{% url 'artist_detail' artist.slug %}">
+                        <div class="artist-image">
+                            {% if artist.image %}
+                            <img src="{{ artist.image.url }}" alt="{{ artist.name }}">
+                            {% else %}
+                            <div class="no-image">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <h3>{{ artist.name }}</h3>
+                        <p>{{ artist.album_count }} albums</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

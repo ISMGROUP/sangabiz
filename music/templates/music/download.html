@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Download {{ song.title }} - Sangabiz{% endblock %}
+
+{% block content %}
+<section class="download">
+    <div class="container">
+        <div class="download-card">
+            <div class="download-image">
+                <img src="{{ song.album.cover.url }}" alt="{{ song.title }}">
+            </div>
+            <div class="download-info">
+                <h2>{{ song.title }}</h2>
+                <p class="artist">By <a href="{% url 'artist' song.artist.id %}">{{ song.artist.name }}</a></p>
+                <p class="album">From <a href="{% url 'album' song.album.id %}">{{ song.album.title }}</a></p>
+                
+                <div class="download-options">
+                    <h3>Download Options</h3>
+                    <div class="options-grid">
+                        <div class="option">
+                            <h4>MP3 320kbps</h4>
+                            <p>High Quality</p>
+                            <a href="{{ song.mp3_320_url }}" class="btn btn-primary">Download</a>
+                        </div>
+                        <div class="option">
+                            <h4>MP3 128kbps</h4>
+                            <p>Standard Quality</p>
+                            <a href="{{ song.mp3_128_url }}" class="btn btn-primary">Download</a>
+                        </div>
+                        <div class="option">
+                            <h4>FLAC</h4>
+                            <p>Lossless Quality</p>
+                            <a href="{{ song.flac_url }}" class="btn btn-primary">Download</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="download-note">
+                    <p><i class="fas fa-info-circle"></i> Downloads are for personal use only. Please support artists by purchasing their music.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="related-songs">
+            <h3 class="section-title">More from {{ song.artist.name }}</h3>
+            <div class="songs-grid">
+                {% for related_song in related_songs %}
+                <div class="song-card">
+                    <div class="song-image">
+                        <img src="{{ related_song.album.cover.url }}" alt="{{ related_song.title }}">
+                        <div class="song-actions">
+                            <button class="play-btn" data-song-id="{{ related_song.id }}"><i class="fas fa-play"></i></button>
+                            <a href="{% url 'download' related_song.id %}" class="download-btn"><i class="fas fa-download"></i></a>
+                        </div>
+                    </div>
+                    <div class="song-info">
+                        <h3><a href="{% url 'song' related_song.id %}">{{ related_song.title }}</a></h3>
+                        <p><a href="{% url 'artist' related_song.artist.id %}">{{ related_song.artist.name }}</a></p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

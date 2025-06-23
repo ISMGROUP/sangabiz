@@ -1,0 +1,38 @@
+{% for comment in comments %}
+<div class="comment" id="comment-{{ comment.id }}" data-comment-id="{{ comment.id }}">
+    <div class="comment-avatar">
+        {% if comment.user.profile.avatar %}
+        <img src="{{ comment.user.profile.avatar.url }}" alt="{{ comment.user.username }}">
+        {% else %}
+        <div class="default-avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        {% endif %}
+    </div>
+    <div class="comment-content">
+        <div class="comment-header">
+            <strong>{{ comment.user.username }}</strong>
+            <span class="comment-date">{{ comment.created_at|timesince }} ago</span>
+            {% if request.user == comment.user or request.user.is_staff %}
+            <button class="delete-comment-btn" data-comment-id="{{ comment.id }}" aria-label="Delete comment">
+                <i class="fas fa-trash"></i>
+            </button>
+            {% endif %}
+        </div>
+        <p>{{ comment.content }}</p>
+        <div class="comment-meta">
+            <span class="like-button" data-content-type="comment" data-object-id="{{ comment.id }}">
+                <i class="far fa-heart"></i> 
+                <span class="like-count">{{ comment.likes.count }}</span>
+            </span>
+            {% if can_comment %}
+            <button class="reply-btn" data-comment-id="{{ comment.id }}">Reply</button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="no-comments">
+    <p>No comments yet. Be the first to comment!</p>
+</div>
+{% endfor %}

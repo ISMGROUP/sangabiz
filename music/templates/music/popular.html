@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Popular Songs - Sangabiz{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const audioPlayer = new Audio();
+    let currentSongId = null;
+    
+    // Play button functionality
+    document.querySelectorAll('.play-btn').forEach(button => {
+        button.addEventListener('click', async function() {
+            const songId = this.getAttribute('data-song-id');
+            
+            try {
+                // If same song, toggle play/pause
+                if (currentSongId === songId) {
+                    if (audioPlayer.paused) {
+                        await audioPlayer.play();
+                        this.innerHTML = '<i class="fas fa-pause"></i>';
+                    } else {
+                        audioPlayer.pause();
+                        this.innerHTML = '<i class="fas fa-play"></i>';
+                    }
+                    return;
+                }
+                
+                // New song - fetch song data
+                currentSongId = songId;
+                const response = await fetch(`/api/songs/${songId}/stream/`);
+                const songData = await response.json();
+                
+                // Update player with new song
+                audioPlayer.src = songData.audio_url;
+                audioPlayer.currentTime = 0;
+                
+                // Update UI
+                document.querySelectorAll('.play-btn').forEach(btn => {
+                    btn.innerHTML = '<i class="fas fa-play"></i>';
+                });
+                this.innerHTML = '<i class="fas fa-pause"></i>';
+                
+                // Play the song
+                await audioPlayer.play();
+                
+                // Record play count
+                fetch(`/api/songs/${songId}/play/`, { 
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error playing song:', error);
+                alert('Error playing song. Please try again.');
+            }
+        });
+    });
+    
+    // Handle audio ended event
+    audioPlayer.addEventListener('ended', function() {
+        document.querySelectorAll(`.play-btn[data-song-id="${currentSongId}"]`).forEach(btn => {
+            btn.innerHTML = '<i class="fas fa-play"></i>';
+        });
+        currentSongId = null;
+    });
+    
+    // Helper function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="popular-songs">
+    <div class="container">
+        <h2 class="section-title">Most Popular Songs</h2>
+        
+        <div class="popularity-tabs">
+            <a href="?sort=downloads" class="tab {% if request.GET.sort != 'plays' %}active{% endif %}">Most Downloads</a>
+            <a href="?sort=plays" class="tab {% if request.GET.sort == 'plays' %}active{% endif %}">Most Plays</a>
+        </div>
+        
+        <div class="songs-grid">
+            {% for song in page_obj %}
+            <div class="song-card" data-song-id="{{ song.id }}">
+                <div class="song-image">
+                    <img src="{{ song.album.cover.url }}" alt="{{ song.title }}" 
+                         loading="lazy" 
+                         onerror="this.onerror=null;this.src='{% static 'images/default-cover.jpg' %}'">
+                    <div class="song-actions">
+                        <button class="play-btn" data-song-id="{{ song.id }}" aria-label="Play {{ song.title }}">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <a href="{% url 'download_song' song.id %}" class="download-btn" 
+                           aria-label="Download {{ song.title }}" download>
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="song-info">
+                    <h3><a href="{% url 'song_detail' song.artist.slug song.album.slug song.slug %}">
+                        {{ song.title }}</a></h3>
+                    <p><a href="{% url 'artist_detail' song.artist.slug %}">{{ song.artist.name }}</a></p>
+                    <div class="song-stats">
+                        <span class="stat" title="Downloads">
+                            <i class="fas fa-download"></i> {{ song.download_count|intcomma }}
+                        </span>
+                        <span class="stat" title="Plays">
+                            <i class="fas fa-play-circle"></i> {{ song.play_count|intcomma }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-songs">
+                <p>No popular songs found.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% include "includes/pagination.html" %}
+    </div>
+</section>
+{% endblock %}
